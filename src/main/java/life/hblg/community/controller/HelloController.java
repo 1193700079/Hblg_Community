@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 public class HelloController {
 
     //接受hello请求  其中@RequestParam 是对于接受请求后面的参数的设置
-    @GetMapping("hello")
+    @GetMapping("")
     public String say(@RequestParam(name="name", required=false, defaultValue="World") String name,
                       Model model){
         model.addAttribute ( "name",name ); //将request Scope 添加到model层中

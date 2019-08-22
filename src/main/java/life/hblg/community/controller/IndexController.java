@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller  //处理URL请求的
-public class HelloController {
+public class IndexController {
 
     //接受hello请求  其中@RequestParam 是对于接受请求后面的参数的设置
     @GetMapping("")

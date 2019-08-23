@@ -11,9 +11,14 @@ public class IndexController {
 
     //接受hello请求  其中@RequestParam 是对于接受请求后面的参数的设置
     @GetMapping("")
-    public String say(@RequestParam(name="name", required=false, defaultValue="World") String name,
-                      Model model){
-        model.addAttribute ( "name",name ); //将request Scope 添加到model层中
+    public String say(){
+
         return "index" ;  //index 为view层
     }
+//    @GetMapping("")
+//    public String say(@RequestParam(name="name", required=false, defaultValue="World") String name,
+//                      Model model){
+//        model.addAttribute ( "name",name ); //将request Scope 添加到model层中
+//        return "index" ;  //index 为view层
+//    }
 }

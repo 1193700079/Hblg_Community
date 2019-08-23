@@ -41,7 +41,7 @@ public class GithubProvider {
 
     }
 
-    //okhttp模仿get请求 得到用户信息
+    //okhttp模仿get请求 得到用户信息(将从服务端获取的信息 装换成一个类)
     public GithubUser getGithubUser(String access_token){
 //        OkHttpClient client = new OkHttpClient();
         //通过忽略证书 解决SSL异常

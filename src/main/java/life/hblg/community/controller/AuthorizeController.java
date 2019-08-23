@@ -2,6 +2,8 @@ package life.hblg.community.controller;
 
 import life.hblg.community.dto.Access_TokenDTO;
 import life.hblg.community.dto.GithubUser;
+import life.hblg.community.mapper.UserMapper;
+import life.hblg.community.model.User;
 import life.hblg.community.provider.GithubProvider;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -9,12 +11,18 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import javax.servlet.http.HttpServletRequest;
+import java.util.UUID;
+
 //gihub授权登录的控制器
 @Controller
 public class AuthorizeController {
 
     @Autowired  //由于GithubProvider为spring中的组件 已经由容器实例化了 直接注入就可以
     private GithubProvider githubProvider;
+
+    @Autowired //由于mapper注解 也是直接成为了spring中的组件
+    private UserMapper userMapper;
 
     @Value ( "${github.client.id}" )
     private String clientId;
@@ -28,7 +36,8 @@ public class AuthorizeController {
     @GetMapping("callback")  //由于在github上设置了返回路由为callback
     //根据github文档中的说明需要获取code和state（这些值来源于github）
     public String returnIndex(@RequestParam(name="code") String code,
-                              @RequestParam(name="state") String state){
+                              @RequestParam(name="state") String state,
+                              HttpServletRequest request){
 
         //从github服务端获取的值传给封装数据对象
         Access_TokenDTO access_tokenDTO = new Access_TokenDTO ();
@@ -42,6 +51,25 @@ public class AuthorizeController {
         String accessToken =githubProvider.getAccessToken ( access_tokenDTO );
        GithubUser githubUser= githubProvider.getGithubUser ( accessToken );
         System.out.println (  githubUser.getBio ());
-        return "index";//返回主页View
+        System.out.println (  githubUser.getName ());
+        System.out.println (  githubUser.getId ());
+        System.out.println (githubUser.getLogin () );
+
+        if(githubUser!=null){
+            //登录成功的话 从request中获取session信息 然后把user信息存放在Session中
+            request.getSession ().setAttribute ( "user",githubUser );
+            User user = new User ();
+            user.setToken ( UUID.randomUUID ().toString () );//设置随机码
+            user.setName ( githubUser.getName () );
+            user.setAccountId ( String.valueOf ( githubUser.getId ()) );
+            user.setGmtCreate ( System.currentTimeMillis () );
+            user.setGmtModify ( user.getGmtCreate () );
+            userMapper.insert ( user );
+            return "redirect:/" ;
+        }else{
+            return "redirect:/" ;
+        }
+
+//        return "index";//返回主页View
     }
 }

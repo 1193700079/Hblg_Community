@@ -24,7 +24,7 @@ public class AuthorizeController {
     private GithubProvider githubProvider;
 
     @Autowired //由于mapper注解 也是直接成为了spring中的组件
-    private UserMapper userMapper;
+    private UserMapper userMapper ;
 
     @Value ( "${github.client.id}" )
     private String clientId;

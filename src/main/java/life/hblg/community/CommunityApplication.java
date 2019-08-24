@@ -4,8 +4,8 @@ import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
+@MapperScan(basePackages = "life.hblg.community.mapper")
 @SpringBootApplication
-@MapperScan(basePackages = "life.hblg.community")
 public class CommunityApplication {
 
     public static void main(String[] args) {

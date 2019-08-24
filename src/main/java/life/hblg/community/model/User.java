@@ -1,6 +1,9 @@
 package life.hblg.community.model;
 
+import org.springframework.stereotype.Component;
+
 //在数据库的数据交换中 存放在model中
+@Component
 public class User {
 
     private Long id;

@@ -11,7 +11,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.util.UUID;
 
 //gihub授权登录的控制器
@@ -37,7 +39,8 @@ public class AuthorizeController {
     //根据github文档中的说明需要获取code和state（这些值来源于github）
     public String returnIndex(@RequestParam(name="code") String code,
                               @RequestParam(name="state") String state,
-                              HttpServletRequest request){
+                              HttpServletRequest request,
+                              HttpServletResponse response){
 
         //从github服务端获取的值传给封装数据对象
         Access_TokenDTO access_tokenDTO = new Access_TokenDTO ();
@@ -56,15 +59,20 @@ public class AuthorizeController {
         System.out.println (githubUser.getLogin () );
 
         if(githubUser!=null){
-            //登录成功的话 从request中获取session信息 然后把user信息存放在Session中
-            request.getSession ().setAttribute ( "user",githubUser );
+
             User user = new User ();
-            user.setToken ( UUID.randomUUID ().toString () );//设置随机码
+            String token = UUID.randomUUID ().toString ();
+            user.setToken ( token );//设置随机码
             user.setName ( githubUser.getName () );
             user.setAccountId ( String.valueOf ( githubUser.getId ()) );
             user.setGmtCreate ( System.currentTimeMillis () );
             user.setGmtModify ( user.getGmtCreate () );
             userMapper.insert ( user );
+
+            response.addCookie ( new Cookie ( "token",token ) );
+
+            //登录成功的话 从request中获取session信息 然后把user信息存放在Session中
+//            request.getSession ().setAttribute ( "user",githubUser );
             return "redirect:/" ;
         }else{
             return "redirect:/" ;

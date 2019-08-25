@@ -1,9 +1,11 @@
 package life.hblg.community.model;
 
+import lombok.Data;
 import org.springframework.stereotype.Component;
 
 //在数据库的数据交换中 存放在model中
 @Component
+@Data  //lombok插件 自动生成 get set toSting方法
 public class User {
 
 
@@ -13,52 +15,7 @@ public class User {
     private String token;
     private Long gmtCreate;
     private Long gmtModify;
+    private String avatarUrl; //图片
 
-    public Integer getId() {
-        return id;
-    }
 
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
-    public String getAccountId() {
-        return accountId;
-    }
-
-    public void setAccountId(String accountId) {
-        this.accountId = accountId;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getToken() {
-        return token;
-    }
-
-    public void setToken(String token) {
-        this.token = token;
-    }
-
-    public Long getGmtCreate() {
-        return gmtCreate;
-    }
-
-    public void setGmtCreate(Long gmtCreate) {
-        this.gmtCreate = gmtCreate;
-    }
-
-    public Long getGmtModify() {
-        return gmtModify;
-    }
-
-    public void setGmtModify(Long gmtModify) {
-        this.gmtModify = gmtModify;
-    }
 }

@@ -4,6 +4,9 @@ import life.hblg.community.model.Topic;
 import life.hblg.community.model.User;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Select;
+
+import java.util.List;
 
 @Mapper
 public interface TopicMapper {
@@ -11,4 +14,7 @@ public interface TopicMapper {
     @Insert( "insert into topic (title,description,createId,gmtCreate,gmtModify,comment_count,view_count,like_count,tag) values\n" +
             " ( #{title},#{description},#{createId},#{gmtCreate},#{gmtModify},#{commentCount},#{viewCount},#{likeCount},#{tag});" )
     void insert(Topic topic);
+
+    @Select ( "select * from topic" )
+    List<Topic> getList();
 }

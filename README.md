@@ -18,6 +18,7 @@ CREATE TABLE IF NOT EXISTS `user`(
    PRIMARY KEY ( `id` )
 )ENGINE=InnoDB DEFAULT CHARSET=utf8;
 alter table user add column bio varchar(256);
+alter table user add column avatar_url varchar(256);
 
 ````
 topic表
@@ -35,4 +36,21 @@ create table if not exists `topic`(
    `tag` VARCHAR(100) NOT NULL,
    PRIMARY KEY ( `id` )
 )ENGINE=InnoDB DEFAULT CHARSET=utf8;
+```
+添加了lombok插件
+
+导入项目的童鞋记得下载此插件
+
+
+# 目前项目存在的问题
+1.图片显示
+```html
+
+<img class="media-object"  src="https://avatars1.githubusercontent.com/u/43908729?v=4">
+```
+
+2.span标签被thymeleaf替代
+```html
+
+<span th:text="${topicDTO.commentCount}"> 个回复 </span>
 ```

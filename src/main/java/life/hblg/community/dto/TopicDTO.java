@@ -1,9 +1,10 @@
-package life.hblg.community.model;
+package life.hblg.community.dto;
 
+import life.hblg.community.model.User;
 import lombok.Data;
 
 @Data
-public class Topic {
+public class TopicDTO {
     private String title;
     private String description;
     private Integer createId;
@@ -13,5 +14,5 @@ public class Topic {
     private Integer viewCount;
     private Integer likeCount;
     private String tag;
-
+    private User user;
 }

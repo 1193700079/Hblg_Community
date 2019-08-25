@@ -3,13 +3,24 @@ package life.hblg.community.model;
 import org.springframework.stereotype.Component;
 
 //在数据库的数据交换中 存放在model中
+@Component
 public class User {
 
+
+    private Integer id;
     private String accountId;
     private String name;
     private String token;
     private Long gmtCreate;
     private Long gmtModify;
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
 
     public String getAccountId() {
         return accountId;

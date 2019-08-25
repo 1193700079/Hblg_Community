@@ -11,7 +11,6 @@ import org.springframework.stereotype.Repository;
 
 
 @Mapper
-@Repository
 public interface UserMapper {
     //通过mybatis的注解 可以自动把User中的相关属性填入#{}中 然后插入到数据库表中
     @Insert ( "insert into user (accountId,name,token,gmtCreate,gmtModify) values\n" +

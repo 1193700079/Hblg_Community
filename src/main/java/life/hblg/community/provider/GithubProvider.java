@@ -18,9 +18,9 @@ public class GithubProvider {
     public String getAccessToken(Access_TokenDTO access_tokenDTO){
         MediaType mediaType = MediaType.get("application/json; charset=utf-8");
 
-//        OkHttpClient client = new OkHttpClient();
+        OkHttpClient client = new OkHttpClient();
         //通过忽略证书 解决SSL异常
-        OkHttpClient client = getUnsafeOkHttpClient();
+//        OkHttpClient client = getUnsafeOkHttpClient();
 
 
         RequestBody body = RequestBody.create(mediaType, JSON.toJSONString ( access_tokenDTO ) );
@@ -43,9 +43,9 @@ public class GithubProvider {
 
     //okhttp模仿get请求 得到用户信息(将从服务端获取的信息 装换成一个类)
     public GithubUser getGithubUser(String access_token){
-//        OkHttpClient client = new OkHttpClient();
+        OkHttpClient client = new OkHttpClient();
         //通过忽略证书 解决SSL异常
-        OkHttpClient client = getUnsafeOkHttpClient();
+//        OkHttpClient client = getUnsafeOkHttpClient();
         Request request = new Request.Builder()
                 .url("https://api.github.com/user?access_token="+access_token)
                 .build();
@@ -61,44 +61,44 @@ public class GithubProvider {
         return null;
     }
     //使用okhttp忽略证书
-    public static OkHttpClient getUnsafeOkHttpClient() {
-
-        try {
-            final TrustManager[] trustAllCerts = new TrustManager[]{
-                    new X509TrustManager () {
-                        @Override
-                        public void checkClientTrusted(java.security.cert.X509Certificate[] chain, String authType) {
-                        }
-
-                        @Override
-                        public void checkServerTrusted(java.security.cert.X509Certificate[] chain, String authType) {
-                        }
-
-                        @Override
-                        public java.security.cert.X509Certificate[] getAcceptedIssuers() {
-                            return new java.security.cert.X509Certificate[]{};
-                        }
-                    }
-            };
-
-            final SSLContext sslContext = SSLContext.getInstance("SSL");
-            sslContext.init(null, trustAllCerts, new java.security.SecureRandom());
-            final javax.net.ssl.SSLSocketFactory sslSocketFactory = sslContext.getSocketFactory();
-            OkHttpClient.Builder builder = new OkHttpClient.Builder();
-            builder.sslSocketFactory(sslSocketFactory);
-
-            builder.hostnameVerifier(new HostnameVerifier() {
-                @Override
-                public boolean verify(String hostname, SSLSession session) {
-                    return true;
-                }
-            });
-
-            return builder.build();
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-
-    }
+//    public static OkHttpClient getUnsafeOkHttpClient() {
+//
+//        try {
+//            final TrustManager[] trustAllCerts = new TrustManager[]{
+//                    new X509TrustManager () {
+//                        @Override
+//                        public void checkClientTrusted(java.security.cert.X509Certificate[] chain, String authType) {
+//                        }
+//
+//                        @Override
+//                        public void checkServerTrusted(java.security.cert.X509Certificate[] chain, String authType) {
+//                        }
+//
+//                        @Override
+//                        public java.security.cert.X509Certificate[] getAcceptedIssuers() {
+//                            return new java.security.cert.X509Certificate[]{};
+//                        }
+//                    }
+//            };
+//
+//            final SSLContext sslContext = SSLContext.getInstance("SSL");
+//            sslContext.init(null, trustAllCerts, new java.security.SecureRandom());
+//            final javax.net.ssl.SSLSocketFactory sslSocketFactory = sslContext.getSocketFactory();
+//            OkHttpClient.Builder builder = new OkHttpClient.Builder();
+//            builder.sslSocketFactory(sslSocketFactory);
+//
+//            builder.hostnameVerifier(new HostnameVerifier() {
+//                @Override
+//                public boolean verify(String hostname, SSLSession session) {
+//                    return true;
+//                }
+//            });
+//
+//            return builder.build();
+//        } catch (Exception e) {
+//            throw new RuntimeException(e);
+//        }
+//
+//    }
 
 }

@@ -10,6 +10,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributesModelMap;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
@@ -33,7 +34,8 @@ public class publishController {
                             @RequestParam(value = "description",required = false) String description,
                             @RequestParam(value = "tag",required = false) String tag,
                             HttpServletRequest request,
-                            Model model){
+                            Model model,
+                            RedirectAttributesModelMap modelMap){
 
         System.out.println (description );
         //model中的东西可以展现到前端去
@@ -43,6 +45,7 @@ public class publishController {
 
         if(title == null || title == ""){
             model.addAttribute ( "error" ,"标题不能为空");
+//            modelMap.addFlashAttribute ( "errorMap","标题不能为空********" );
             return "publish";
         }
         if(description == null || description == ""){
@@ -70,6 +73,7 @@ public class publishController {
 
         return "redirect:/" ; //重定向 返回首页
 
+//        return "/";
 
     }
 

@@ -1,19 +1,18 @@
 package life.hblg.community.controller;
 
-import life.hblg.community.dto.TopicDTO;
+import life.hblg.community.dto.PaginationDTO;
 import life.hblg.community.mapper.TopicMapper;
 import life.hblg.community.mapper.UserMapper;
-import life.hblg.community.model.Topic;
 import life.hblg.community.model.User;
 import life.hblg.community.service.TopicService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
-import java.util.List;
 
 @Controller  //处理URL请求的
 public class IndexController {
@@ -27,9 +26,11 @@ public class IndexController {
     @Autowired
     private TopicService topicService;
 
-    @GetMapping("")
+    @GetMapping("") //pageId 表示从前端接受的当前为第几页  size为一页显示topic的数量
     public String say(HttpServletRequest request,
-                      Model model){
+                      Model model,
+                      @RequestParam(name = "pageId",defaultValue = "1")Integer pageId,
+                      @RequestParam(name = "size",defaultValue = "2")Integer size){
 
         Cookie[] cookies=request.getCookies ();
         for (Cookie cookie : cookies) {
@@ -43,8 +44,8 @@ public class IndexController {
             }
 
         }
-        List<TopicDTO> topicDTOList = topicService.getList();
-        model.addAttribute ( "topicDTOList",topicDTOList );
+        PaginationDTO paginationDTO = topicService.getList(pageId, size);
+        model.addAttribute ( "paginationDTO",paginationDTO );
         return "index" ;  //index 为view层
     }
     //接受hello请求  其中@RequestParam 是对于接受请求后面的参数的设置

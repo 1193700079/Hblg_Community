@@ -18,3 +18,9 @@ body{
     font-weight: normal;
     color: #999999;
 }
+.paginationNav{
+    float: right;
+}
+.profile .section{
+    margin-top: 15px;
+}

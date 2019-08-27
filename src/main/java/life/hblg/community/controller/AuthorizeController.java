@@ -70,10 +70,12 @@ public class AuthorizeController {
             user.setGmtCreate ( System.currentTimeMillis ( ) );
             user.setGmtModify ( user.getGmtCreate ( ) );
             user.setAvatarUrl ( githubUser.getAvatar_url ( ) );
-            model.addAttribute ( "avatarUrl", user.getAvatarUrl ( ) );
+            model.addAttribute ( "avatarUrl", user.getAvatarUrl ( ) ); //由于最后返回是重定向 所以这个model就消失了
+            System.out.println (user.getAvatarUrl () +"**c****************");
             userMapper.insert ( user );
 
             response.addCookie ( new Cookie ( "token", token ) );
+//            request.getSession ().setAttribute ( "avatarUrl",user.getAvatarUrl ( ));
 
             //登录成功的话 从request中获取session信息 然后把user信息存放在Session中
 //            request.getSession ().setAttribute ( "user",githubUser );

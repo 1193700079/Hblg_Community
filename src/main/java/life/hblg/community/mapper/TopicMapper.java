@@ -4,6 +4,7 @@ import life.hblg.community.model.Topic;
 import life.hblg.community.model.User;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 
 import java.util.List;
@@ -15,6 +16,18 @@ public interface TopicMapper {
             " ( #{title},#{description},#{createId},#{gmtCreate},#{gmtModify},#{commentCount},#{viewCount},#{likeCount},#{tag});" )
     void insert(Topic topic);
 
-    @Select ( "select * from topic" )
-    List<Topic> getList();
+    //为了分页显示
+    @Select ( "select * from topic limit #{offset},#{size}" )
+    List<Topic> getList(@Param( "offset" )Integer offset, @Param ( "size" )Integer size);
+
+    @Select ( "select count(1) from topic" )
+    Integer Count();
+
+
+    //某用户展示话题
+    @Select ( "select * from topic where createId = #{userId} limit #{offset},#{size}" )
+    List<Topic> getListByUserId(@Param ( "userId" )Integer userId, @Param( "offset" )Integer offset, @Param ( "size" )Integer size);
+
+    @Select ( "select count(1) from topic where createId = #{userId}" )
+    Integer CountByuserId(@Param ( "userId" )Integer userId);
 }

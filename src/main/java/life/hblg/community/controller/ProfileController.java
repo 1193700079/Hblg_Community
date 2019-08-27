@@ -29,7 +29,7 @@ public class ProfileController {
                           Model model,
                           @RequestParam(name = "pageId",defaultValue = "1")Integer pageId,
                           @RequestParam(name = "size",defaultValue = "2")Integer size){
-        User user = getUserMsg ( request );
+        User user = (User) request.getSession ().getAttribute ( "user" );
         if(user==null){
             return "redirect:/";
         }
@@ -47,20 +47,20 @@ public class ProfileController {
         model.addAttribute ( "paginationDTO",paginationDTO );
         return "profile";
     }
-    //获取User信息
-    public User getUserMsg(HttpServletRequest request){
-        Cookie[] cookies=request.getCookies ();
-        for (Cookie cookie : cookies) {
-            if (cookie.getName ( ).equals ( "token" )) {
-                String token = cookie.getValue ( );
-                User user = userMapper.findByToken ( token );
-                if (user != null) {
-                    request.getSession ().setAttribute ( "user",user );
-                    return user;
-                }
-                break;
-            }
-        }
-        return null;
-    }
+//    //获取User信息
+//    public User getUserMsg(HttpServletRequest request){
+//        Cookie[] cookies=request.getCookies ();
+//        for (Cookie cookie : cookies) {
+//            if (cookie.getName ( ).equals ( "token" )) {
+//                String token = cookie.getValue ( );
+//                User user = userMapper.findByToken ( token );
+//                if (user != null) {
+//                    request.getSession ().setAttribute ( "user",user );
+//                    return user;
+//                }
+//                break;
+//            }
+//        }
+//        return null;
+//    }
 }

@@ -4,6 +4,7 @@ import lombok.Data;
 
 @Data
 public class Topic {
+    private Integer id;
     private String title;
     private String description;
     private Integer createId;

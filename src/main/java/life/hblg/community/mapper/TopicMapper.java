@@ -1,11 +1,9 @@
 package life.hblg.community.mapper;
 
+import life.hblg.community.dto.TopicDTO;
 import life.hblg.community.model.Topic;
 import life.hblg.community.model.User;
-import org.apache.ibatis.annotations.Insert;
-import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Param;
-import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.*;
 
 import java.util.List;
 
@@ -30,4 +28,14 @@ public interface TopicMapper {
 
     @Select ( "select count(1) from topic where createId = #{userId}" )
     Integer CountByuserId(@Param ( "userId" )Integer userId);
+
+
+// 某用户话题详情
+
+    @Select ( "select * from topic where id = #{id}" )
+    Topic getTopicDetialById(@Param ( "id" )Integer id);
+
+
+    @Update( "update topic set title = #{title},description = #{description},gmtModify=#{gmtModify},tag=#{tag} where id = #{id}")
+    void update(Topic topic);
 }

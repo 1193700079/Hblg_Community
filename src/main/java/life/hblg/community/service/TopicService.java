@@ -70,4 +70,30 @@ public class TopicService {
         paginationDTO.setPagenation(totalCount,pageId,size);
         return  paginationDTO;
     }
+
+    //得到详情列表
+    public TopicDTO getTopicDetialById(Integer id) {
+        Topic topic =topicMapper.getTopicDetialById(id);
+        TopicDTO topicDTO = new TopicDTO ();
+        BeanUtils.copyProperties ( topic,topicDTO);//3.spring中的工具类 将topic的属性都给topicDTO
+        User user = userMapper.findById ( topic.getCreateId () );
+        topicDTO.setUser ( user );
+        return  topicDTO;
+    }
+
+    //
+    public void insertOrUpdate(Topic topic) {
+        //这个是在程序中设置的ID 和数据库没有关系
+        Integer searchId = topic.getId ();
+        if(searchId==null){
+            //没有查到 说明是第一次
+            topic.setGmtCreate ( System.currentTimeMillis () );
+            topic.setGmtModify ( topic.getGmtCreate () );
+            topicMapper.insert(topic);
+        }else {
+            //更新
+            topic.setGmtModify(System.currentTimeMillis ());
+            topicMapper.update(topic);
+        }
+    }
 }

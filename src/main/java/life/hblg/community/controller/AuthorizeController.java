@@ -5,6 +5,7 @@ import life.hblg.community.dto.GithubUser;
 import life.hblg.community.mapper.UserMapper;
 import life.hblg.community.model.User;
 import life.hblg.community.provider.GithubProvider;
+import life.hblg.community.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
@@ -26,6 +27,9 @@ public class AuthorizeController {
 
     @Autowired //由于mapper注解 也是直接成为了spring中的组件
     private UserMapper userMapper;
+
+    @Autowired
+    private UserService userService;
 
     @Value("${github.client.id}")
     private String clientId;
@@ -55,35 +59,58 @@ public class AuthorizeController {
         //获取到了accessToken
         String accessToken = githubProvider.getAccessToken ( access_tokenDTO );
         GithubUser githubUser = githubProvider.getGithubUser ( accessToken );
-        System.out.println ( githubUser.getBio ( ) );
-        System.out.println ( githubUser.getName ( ) );
-        System.out.println ( githubUser.getId ( ) );
-        System.out.println ( githubUser.getLogin ( ) );
 
         if (githubUser != null && githubUser.getId ( ) != null) {
-
             User user = new User ( );
             String token = UUID.randomUUID ( ).toString ( );
             user.setToken ( token );//设置随机码
             user.setName ( githubUser.getName ( ) );
             user.setAccountId ( String.valueOf ( githubUser.getId ( ) ) );
-            user.setGmtCreate ( System.currentTimeMillis ( ) );
-            user.setGmtModify ( user.getGmtCreate ( ) );
+       //    user.setGmtCreate ( System.currentTimeMillis ( ) );   //放在Service层
+      //      user.setGmtModify ( user.getGmtCreate ( ) );
             user.setAvatarUrl ( githubUser.getAvatar_url ( ) );
+            user.setBio ( githubUser.getBio () );
             model.addAttribute ( "avatarUrl", user.getAvatarUrl ( ) ); //由于最后返回是重定向 所以这个model就消失了
             System.out.println (user.getAvatarUrl () +"**c****************");
-            userMapper.insert ( user );
+
+            userService.createOrUpdate ( user );
+
 
             response.addCookie ( new Cookie ( "token", token ) );
 //            request.getSession ().setAttribute ( "avatarUrl",user.getAvatarUrl ( ));
 
             //登录成功的话 从request中获取session信息 然后把user信息存放在Session中
-//            request.getSession ().setAttribute ( "user",githubUser );
+            request.getSession ().setAttribute ( "user",user );
             return "redirect:/";
         } else {
             return "redirect:/";
         }
 
 //        return "index";//返回主页View
+    }
+
+    //退出登录的接口
+    @GetMapping("/logout")
+    public String logout(HttpServletRequest request,
+                         HttpServletResponse response){
+        request.getSession ().removeAttribute ( "user" ); //移除user这个Session
+        Cookie cookie = new Cookie("token",null);
+        cookie.setMaxAge(0);
+        //cookie.setPath("/");//根据你创建cookie的路径进行填写
+        response.addCookie(cookie);
+
+//        Cookie[] cookies=request.getCookies();
+//        try{
+//            for(int i=0;i<cookies.length;i++){
+//                Cookie cookie = new Cookie("token",null);
+//                cookie.setMaxAge(0);
+//                //cookie.setPath("/");//根据你创建cookie的路径进行填写
+//                response.addCookie(cookie);
+//            }
+//        }catch(Exception ex) {
+//            System.out.println ( "清空Cookies发生异常！" );
+//        }
+
+        return "redirect:/";
     }
 }

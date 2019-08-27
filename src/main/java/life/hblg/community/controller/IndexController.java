@@ -32,18 +32,7 @@ public class IndexController {
                       @RequestParam(name = "pageId",defaultValue = "1")Integer pageId,
                       @RequestParam(name = "size",defaultValue = "2")Integer size){
 
-        Cookie[] cookies=request.getCookies ();
-        for (Cookie cookie : cookies) {
-            if(cookie.getName ().equals ( "token" )){
-                String token = cookie.getValue ();
-                User user = userMapper.findByToken ( token );
-                if(user != null){
-                    request.getSession ().setAttribute ( "user",user );
-                }
-                break;
-            }
 
-        }
         PaginationDTO paginationDTO = topicService.getList(pageId, size);
         model.addAttribute ( "paginationDTO",paginationDTO );
         return "index" ;  //index 为view层

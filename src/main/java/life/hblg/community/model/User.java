@@ -16,6 +16,7 @@ public class User {
     private Long gmtCreate;
     private Long gmtModify;
     private String avatarUrl; //图片
+    private String bio;
 
 
 }

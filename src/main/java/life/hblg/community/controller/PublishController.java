@@ -1,28 +1,38 @@
 package life.hblg.community.controller;
 
+import life.hblg.community.dto.TopicDTO;
 import life.hblg.community.mapper.TopicMapper;
-import life.hblg.community.mapper.UserMapper;
 import life.hblg.community.model.Topic;
 import life.hblg.community.model.User;
+import life.hblg.community.service.TopicService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributesModelMap;
 
-import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 
 @Controller
 public class PublishController {
 
     @Autowired
-    private TopicMapper topicMapper;
+    private TopicService topicService;
 
-    @Autowired
-    private UserMapper userMapper;
+    @GetMapping("/publish/{id}")
+    public String edit(@PathVariable(name = "id")Integer id,
+                       Model model){
+        TopicDTO topic = topicService.getTopicDetialById ( id );
+        model.addAttribute ( "topic",topic );
+        model.addAttribute("title",topic.getTitle ());
+        model.addAttribute("description",topic.getDescription ());
+        model.addAttribute("tag",topic.getTag ());
+        model.addAttribute ( "id",topic.getId () );
+        return "publish";
+    }
 
     @GetMapping("/publish")
     public String publish(){
@@ -33,6 +43,7 @@ public class PublishController {
     public String doPublish(@RequestParam(value = "title",required = false) String title,
                             @RequestParam(value = "description",required = false) String description,
                             @RequestParam(value = "tag",required = false) String tag,
+                            @RequestParam(value = "id",required = false)Integer id,
                             HttpServletRequest request,
                             Model model,
                             RedirectAttributesModelMap modelMap){
@@ -42,6 +53,7 @@ public class PublishController {
         model.addAttribute("title",title);
         model.addAttribute("description",description);
         model.addAttribute("tag",tag);
+
 
         if(title == null || title == ""){
             model.addAttribute ( "error" ,"标题不能为空");
@@ -70,9 +82,11 @@ public class PublishController {
             return "publish";
         }
         topic.setCreateId ( user.getId () );
-        topic.setGmtCreate ( System.currentTimeMillis () );
-        topic.setGmtModify ( topic.getGmtCreate () );
-        topicMapper.insert ( topic );
+
+        topic.setId ( id );
+
+        System.out.println (topic.getId () );
+        topicService.insertOrUpdate (topic);
 
         return "redirect:/" ; //重定向 返回首页
 

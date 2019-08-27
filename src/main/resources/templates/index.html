@@ -19,7 +19,7 @@
     <script src="https://cdn.bootcss.com/jquery/3.4.1/core.js"></script>
 
     <!--导入CSS文件-->
-    <link type="text/css" rel="styleSheet"  href="css/community.css" />
+    <link type="text/css" rel="styleSheet"  href="/css/community.css" />
 </head>
 <body>
 <div th:insert="~{navigation :: nav}"></div>
@@ -30,11 +30,13 @@
             <h2><span class="glyphicon glyphicon-th-list" aria-hidden="true"> 发现 </span></h2>
             <hr>
 
+
             <!--话题列表-->
             <div class="media" th:each="topicDTO : ${paginationDTO.topicDTOs}">
                 <div class="media-left">
                     <a href="#">
-                        <img class="media-object"  th:src="${session.user.avatarUrl}">
+                        <img class="media-object"  th:src="${topicDTO.user.avatarUrl}">
+                        <!--th:src="${session.user.avatarUrl}"-->
                         <!--https://avatars1.githubusercontent.com/u/43908729?v=4-->
                     </a>
                 </div>

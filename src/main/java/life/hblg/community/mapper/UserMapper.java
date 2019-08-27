@@ -10,8 +10,8 @@ import org.springframework.stereotype.Repository;
 @Mapper
 public interface UserMapper {
     //通过mybatis的注解 可以自动把User中的相关属性填入#{}中 然后插入到数据库表中
-    @Insert ( "insert into user (accountId,name,token,gmtCreate,gmtModify,avatar_url) values\n" +
-            " ( #{accountId},#{name},#{token},#{gmtCreate},#{gmtModify},#{avatarUrl});" )
+    @Insert ( "insert into user (accountId,name,token,gmtCreate,gmtModify,avatar_url,bio) values\n" +
+            " ( #{accountId},#{name},#{token},#{gmtCreate},#{gmtModify},#{avatarUrl},#{bio});" )
     void insert(User user);
 
     @Select ( "select * from user where token = #{token}" )

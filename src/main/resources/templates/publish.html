@@ -18,7 +18,7 @@
     <!--<script src="https://cdn.bootcss.com/jquery/3.4.1/core.js"></script>-->
 
     <!--导入CSS文件-->
-    <link type="text/css" rel="styleSheet"  href="css/community.css" />
+    <link type="text/css" rel="styleSheet"  href="/css/community.css" />
 </head>
 <body>
 <div th:insert="~{navigation :: nav}"></div>
@@ -28,7 +28,9 @@
             <h2><span class="glyphicon glyphicon-plus" aria-hidden="true">发起</span></h2>
 
             <hr>
-            <form action="publish" method="post">
+
+            <form action="/publish" method="post">
+                <input type="hidden" name="id" th:value="${id}">
                 <div class="form-group">
                     <label for="title">话题标题（简单扼要）</label>
                     <input type="text" class="form-control" id="title" th:value="${title}" name="title" placeholder="话题标题...">

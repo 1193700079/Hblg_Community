@@ -81,4 +81,19 @@ public class TopicService {
         return  topicDTO;
     }
 
+    //
+    public void insertOrUpdate(Topic topic) {
+        //这个是在程序中设置的ID 和数据库没有关系
+        Integer searchId = topic.getId ();
+        if(searchId==null){
+            //没有查到 说明是第一次
+            topic.setGmtCreate ( System.currentTimeMillis () );
+            topic.setGmtModify ( topic.getGmtCreate () );
+            topicMapper.insert(topic);
+        }else {
+            //更新
+            topic.setGmtModify(System.currentTimeMillis ());
+            topicMapper.update(topic);
+        }
+    }
 }

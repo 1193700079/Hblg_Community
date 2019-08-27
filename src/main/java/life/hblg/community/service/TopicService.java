@@ -70,4 +70,15 @@ public class TopicService {
         paginationDTO.setPagenation(totalCount,pageId,size);
         return  paginationDTO;
     }
+
+    //得到详情列表
+    public TopicDTO getTopicDetialById(Integer id) {
+        Topic topic =topicMapper.getTopicDetialById(id);
+        TopicDTO topicDTO = new TopicDTO ();
+        BeanUtils.copyProperties ( topic,topicDTO);//3.spring中的工具类 将topic的属性都给topicDTO
+        User user = userMapper.findById ( topic.getCreateId () );
+        topicDTO.setUser ( user );
+        return  topicDTO;
+    }
+
 }

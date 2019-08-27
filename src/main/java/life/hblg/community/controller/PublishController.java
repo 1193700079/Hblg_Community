@@ -16,7 +16,7 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 
 @Controller
-public class publishController {
+public class PublishController {
 
     @Autowired
     private TopicMapper topicMapper;
@@ -61,7 +61,10 @@ public class publishController {
         topic.setTitle ( title );
         topic.setDescription ( description );
         topic.setTag ( tag );
-        User user = getUserMsg ( request ); //获取User信息
+
+        //由于在拦截器中已经添加了user信息
+        User user = (User) request.getSession ().getAttribute ( "user" );
+//        User user = getUserMsg ( request ); //获取User信息
         if(user==null){
             model.addAttribute ( "error","用户未登陆" );//属性值 和 属性名
             return "publish";
@@ -78,19 +81,19 @@ public class publishController {
     }
 
     //获取User信息
-    public User getUserMsg(HttpServletRequest request){
-        Cookie[] cookies=request.getCookies ();
-        for (Cookie cookie : cookies) {
-            if (cookie.getName ( ).equals ( "token" )) {
-                String token = cookie.getValue ( );
-                User user = userMapper.findByToken ( token );
-                if (user != null) {
-                    request.getSession ().setAttribute ( "user",user );
-                    return user;
-                }
-                break;
-            }
-        }
-        return null;
-    }
+//    public User getUserMsg(HttpServletRequest request){
+//        Cookie[] cookies=request.getCookies ();
+//        for (Cookie cookie : cookies) {
+//            if (cookie.getName ( ).equals ( "token" )) {
+//                String token = cookie.getValue ( );
+//                User user = userMapper.findByToken ( token );
+//                if (user != null) {
+//                    request.getSession ().setAttribute ( "user",user );
+//                    return user;
+//                }
+//                break;
+//            }
+//        }
+//        return null;
+//    }
 }

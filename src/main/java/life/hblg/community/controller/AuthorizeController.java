@@ -5,6 +5,7 @@ import life.hblg.community.dto.GithubUser;
 import life.hblg.community.mapper.UserMapper;
 import life.hblg.community.model.User;
 import life.hblg.community.provider.GithubProvider;
+import life.hblg.community.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
@@ -26,6 +27,9 @@ public class AuthorizeController {
 
     @Autowired //由于mapper注解 也是直接成为了spring中的组件
     private UserMapper userMapper;
+
+    @Autowired
+    private UserService userService;
 
     @Value("${github.client.id}")
     private String clientId;
@@ -67,12 +71,13 @@ public class AuthorizeController {
             user.setToken ( token );//设置随机码
             user.setName ( githubUser.getName ( ) );
             user.setAccountId ( String.valueOf ( githubUser.getId ( ) ) );
-            user.setGmtCreate ( System.currentTimeMillis ( ) );
-            user.setGmtModify ( user.getGmtCreate ( ) );
+//            user.setGmtCreate ( System.currentTimeMillis ( ) );   //放在Service层
+//            user.setGmtModify ( user.getGmtCreate ( ) );
             user.setAvatarUrl ( githubUser.getAvatar_url ( ) );
-            model.addAttribute ( "avatarUrl", user.getAvatarUrl ( ) ); //由于最后返回是重定向 所以这个model就消失了
-            System.out.println (user.getAvatarUrl () +"**c****************");
-            userMapper.insert ( user );
+//            model.addAttribute ( "avatarUrl", user.getAvatarUrl ( ) ); //由于最后返回是重定向 所以这个model就消失了
+//            System.out.println (user.getAvatarUrl () +"**c****************");
+//            userMapper.insert ( user );
+            userService.createOrUpdate(user);
 
             response.addCookie ( new Cookie ( "token", token ) );
 //            request.getSession ().setAttribute ( "avatarUrl",user.getAvatarUrl ( ));

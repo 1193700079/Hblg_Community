@@ -1,7 +1,7 @@
 <!DOCTYPE HTML>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>华北理工社区</title>
+        <title th:text="${sectionName}">华北理工社区</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
     <!--这个script的顺序也很重要-->
     <script src="https://cdn.bootcss.com/jquery/3.4.1/jquery.js"></script>
@@ -19,17 +19,16 @@
     <script src="https://cdn.bootcss.com/jquery/3.4.1/core.js"></script>
 
     <!--导入CSS文件-->
-    <link type="text/css" rel="styleSheet"  href="css/community.css" />
+    <link type="text/css" rel="styleSheet"  href="/css/community.css" />
 </head>
 <body>
 <div th:insert="~{navigation :: nav}"></div>
 
-<div class="container-fluid main">
+<div class="container-fluid main profile">
     <div class="row">
         <div class="col-lg-9 col-md-12 col-sm-12 col-xs-12" >
-            <h2><span class="glyphicon glyphicon-th-list" aria-hidden="true"> 发现 </span></h2>
+            <h2><span th:text="${sectionName}"></span></h2>
             <hr>
-
 
             <div class="media" th:each="topicDTO : ${paginationDTO.topicDTOs}">
                 <div class="media-left">
@@ -55,38 +54,43 @@
             <nav aria-label="Page navigation" class="paginationNav">
                 <ul class="pagination">
                     <li th:if="${paginationDTO.isBackFirstPage}">
-                        <a th:href="@{/(pageId=1)}" aria-label="Previous">
+                        <!--@{'/profile/'+${section}(pageId=1)}  thymeleaf的URL字符串拼接-->
+                        <a  th:href="@{'/profile/'+${section}(pageId=1)}" aria-label="Previous">
                             <span aria-hidden="true">&lt;&lt;</span>
                         </a>
                     </li>
                     <li th:if="${paginationDTO.isPrevious}">
-                        <a th:href="@{/(pageId=${paginationDTO.currentPageId - 1})}" aria-label="Previous">
+                        <a th:href="@{'/profile/'+${section}(pageId=${paginationDTO.currentPageId - 1})}" aria-label="Previous">
                             <span aria-hidden="true">&lt;</span>
                         </a>
                     </li>
                     <li th:each="pageId:${paginationDTO.pages}"
                         th:class="${paginationDTO.currentPageId==pageId} ? 'active':''">
-                        <a th:href="@{/(pageId=${pageId})}" th:text="${pageId}"></a>
+                        <a th:href="@{'/profile/'+${section}(pageId=${pageId})}"
+                           th:text="${pageId}"></a>
                     </li>
                     <li th:if="${paginationDTO.isNext}">
-                        <a th:href="@{/(pageId=${paginationDTO.currentPageId + 1})}" aria-label="Next">
+                        <a th:href="@{'/profile/'+${section}(pageId=${paginationDTO.currentPageId + 1})}"
+                           aria-label="Next">
                             <span aria-hidden="true">&gt;</span>
                         </a>
                     </li>
                     <li th:if="${paginationDTO.isBackEndPage}">
-                        <a th:href="@{/(pageId=${paginationDTO.totalPage})}" aria-label="Next">
+                        <a th:href="@{'/profile/'+${section}(pageId=${paginationDTO.totalPage})}"
+                           aria-label="Next">
                             <span aria-hidden="true">&gt;&gt;</span>
                         </a>
                     </li>
                 </ul>
             </nav>
 
+
         </div>
 
         <div class="col-lg-3 col-md-12 col-sm-12 col-xs-12" >
-            <h3>热门话题</h3>
-            <div>
-                <a></a>
+            <div class="list-group section">
+                <a href="/profile/topics" class="list-group-item" th:classappend="${section=='topics'} ? 'active':''">我的话题</a>
+                <a href="/profile/replies" class="list-group-item" th:classappend="${section=='replies'} ? 'active':''">我的回复<span class="badge">14</span></a>
             </div>
         </div>
     </div>

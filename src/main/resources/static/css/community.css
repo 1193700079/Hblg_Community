@@ -21,3 +21,6 @@ body{
 .paginationNav{
     float: right;
 }
+.profile .section{
+    margin-top: 15px;
+}

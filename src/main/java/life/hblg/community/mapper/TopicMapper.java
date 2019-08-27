@@ -22,4 +22,12 @@ public interface TopicMapper {
 
     @Select ( "select count(1) from topic" )
     Integer Count();
+
+
+    //某用户展示话题
+    @Select ( "select * from topic where createId = #{userId} limit #{offset},#{size}" )
+    List<Topic> getListByUserId(@Param ( "userId" )Integer userId, @Param( "offset" )Integer offset, @Param ( "size" )Integer size);
+
+    @Select ( "select count(1) from topic where createId = #{userId}" )
+    Integer CountByuserId(@Param ( "userId" )Integer userId);
 }

@@ -45,4 +45,29 @@ public class TopicService {
         paginationDTO.setPagenation(totalCount,pageId,size);
         return  paginationDTO;
     }
+
+    //得到某个用户的列表 通过用户的Id值
+    public PaginationDTO getListByUserId(Integer userId, Integer pageId, Integer size) {
+        //由于数据库中的1 2 3 4 都表示第一页
+        //因此currentId(offset) 只有 0 5 10这样的取值
+        Integer offset = size*(pageId-1);
+
+        List<Topic> topicList = topicMapper.getListByUserId(userId,offset,size);
+        List<TopicDTO> topicDTOList = new ArrayList <> ();
+
+        PaginationDTO paginationDTO = new PaginationDTO ( );
+        for (Topic topic : topicList) {
+            //1.通过找到topic表中对应的关联UserID找到User
+            User user = userMapper.findById ( topic.getCreateId () );
+            //2.将找到的User 放入两表的DTO中
+            TopicDTO topicDTO=new TopicDTO ();
+            BeanUtils.copyProperties ( topic,topicDTO);//3.spring中的工具类 将topic的属性都给topicDTO
+            topicDTO.setUser ( user );
+            topicDTOList.add ( topicDTO );  //将每个DTO添加到TopicLIST中
+        }
+        paginationDTO.setTopicDTOs( topicDTOList);
+        Integer totalCount = topicMapper.CountByuserId (userId);
+        paginationDTO.setPagenation(totalCount,pageId,size);
+        return  paginationDTO;
+    }
 }

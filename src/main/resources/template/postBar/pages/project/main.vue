@@ -1,7 +1,6 @@
 <template>
-  <div>
-    <button @click="www">+</button>
-    {{ count }}
+  <div class="">
+
   </div>
 </template>
 
@@ -33,7 +32,7 @@
       ...mapMutations('main',[
         'increment'
       ]),
-      www(){
+      click(){
         this.increment(this.count)
       }
     }

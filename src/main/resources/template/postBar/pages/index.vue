@@ -4,7 +4,7 @@
 <script>
 export default {
   created() {
-    this.$router.push('/user/login');
+    this.$router.push('/project/main');
   }
 }
 </script>

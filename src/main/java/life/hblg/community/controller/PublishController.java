@@ -1,7 +1,6 @@
 package life.hblg.community.controller;
 
 import life.hblg.community.dto.TopicDTO;
-import life.hblg.community.mapper.TopicMapper;
 import life.hblg.community.model.Topic;
 import life.hblg.community.model.User;
 import life.hblg.community.service.TopicService;

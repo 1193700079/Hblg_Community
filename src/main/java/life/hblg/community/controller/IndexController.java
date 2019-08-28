@@ -1,9 +1,6 @@
 package life.hblg.community.controller;
 
 import life.hblg.community.dto.PaginationDTO;
-import life.hblg.community.mapper.TopicMapper;
-import life.hblg.community.mapper.UserMapper;
-import life.hblg.community.model.User;
 import life.hblg.community.service.TopicService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -11,17 +8,11 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 
 @Controller  //处理URL请求的
 public class IndexController {
 
-    @Autowired
-    private UserMapper userMapper;
-
-    @Autowired
-    private TopicMapper topicMapper;
 
     @Autowired
     private TopicService topicService;

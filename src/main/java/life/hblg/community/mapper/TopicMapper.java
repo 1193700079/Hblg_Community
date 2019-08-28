@@ -1,41 +1,41 @@
 package life.hblg.community.mapper;
 
-import life.hblg.community.dto.TopicDTO;
-import life.hblg.community.model.Topic;
-import life.hblg.community.model.User;
-import org.apache.ibatis.annotations.*;
-
 import java.util.List;
+import life.hblg.community.model.Topic;
+import life.hblg.community.model.TopicExample;
+import org.apache.ibatis.annotations.Param;
+import org.apache.ibatis.session.RowBounds;
 
-@Mapper
 public interface TopicMapper {
-    //通过mybatis的注解 可以自动把User中的相关属性填入#{}中 然后插入到数据库表中
-    @Insert( "insert into topic (title,description,createId,gmtCreate,gmtModify,comment_count,view_count,like_count,tag) values\n" +
-            " ( #{title},#{description},#{createId},#{gmtCreate},#{gmtModify},#{commentCount},#{viewCount},#{likeCount},#{tag});" )
-    void insert(Topic topic);
+    long countByExample(TopicExample example);
 
-    //为了分页显示
-    @Select ( "select * from topic limit #{offset},#{size}" )
-    List<Topic> getList(@Param( "offset" )Integer offset, @Param ( "size" )Integer size);
+    int deleteByExample(TopicExample example);
 
-    @Select ( "select count(1) from topic" )
-    Integer Count();
+    int deleteByPrimaryKey(Integer id);
 
+    int insert(Topic record);
 
-    //某用户展示话题
-    @Select ( "select * from topic where createId = #{userId} limit #{offset},#{size}" )
-    List<Topic> getListByUserId(@Param ( "userId" )Integer userId, @Param( "offset" )Integer offset, @Param ( "size" )Integer size);
+    int insertSelective(Topic record);
 
-    @Select ( "select count(1) from topic where createId = #{userId}" )
-    Integer CountByuserId(@Param ( "userId" )Integer userId);
+    List<Topic> selectByExampleWithBLOBsWithRowbounds(TopicExample example, RowBounds rowBounds);
 
+    List<Topic> selectByExampleWithBLOBs(TopicExample example);
 
-// 某用户话题详情
+    List<Topic> selectByExampleWithRowbounds(TopicExample example, RowBounds rowBounds);
 
-    @Select ( "select * from topic where id = #{id}" )
-    Topic getTopicDetialById(@Param ( "id" )Integer id);
+    List<Topic> selectByExample(TopicExample example);
 
+    Topic selectByPrimaryKey(Integer id);
 
-    @Update( "update topic set title = #{title},description = #{description},gmtModify=#{gmtModify},tag=#{tag} where id = #{id}")
-    void update(Topic topic);
+    int updateByExampleSelective(@Param("record") Topic record, @Param("example") TopicExample example);
+
+    int updateByExampleWithBLOBs(@Param("record") Topic record, @Param("example") TopicExample example);
+
+    int updateByExample(@Param("record") Topic record, @Param("example") TopicExample example);
+
+    int updateByPrimaryKeySelective(Topic record);
+
+    int updateByPrimaryKeyWithBLOBs(Topic record);
+
+    int updateByPrimaryKey(Topic record);
 }

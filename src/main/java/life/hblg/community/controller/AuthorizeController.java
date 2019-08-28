@@ -2,7 +2,6 @@ package life.hblg.community.controller;
 
 import life.hblg.community.dto.Access_TokenDTO;
 import life.hblg.community.dto.GithubUser;
-import life.hblg.community.mapper.UserMapper;
 import life.hblg.community.model.User;
 import life.hblg.community.provider.GithubProvider;
 import life.hblg.community.service.UserService;
@@ -24,9 +23,6 @@ public class AuthorizeController {
 
     @Autowired  //由于GithubProvider为spring中的组件 已经由容器实例化了 直接注入就可以
     private GithubProvider githubProvider;
-
-    @Autowired //由于mapper注解 也是直接成为了spring中的组件
-    private UserMapper userMapper;
 
     @Autowired
     private UserService userService;
@@ -66,6 +62,7 @@ public class AuthorizeController {
             user.setToken ( token );//设置随机码
             user.setName ( githubUser.getName ( ) );
             user.setAccountId ( String.valueOf ( githubUser.getId ( ) ) );
+//            user.setAccountId ( String.valueOf ( githubUser.getId ( ) ) );
        //    user.setGmtCreate ( System.currentTimeMillis ( ) );   //放在Service层
       //      user.setGmtModify ( user.getGmtCreate ( ) );
             user.setAvatarUrl ( githubUser.getAvatar_url ( ) );

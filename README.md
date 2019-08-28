@@ -1,7 +1,7 @@
 # 华北理工社区
 专注于师生的服务
 
-项目创建人：卿人
+项目创建人：卿人 晓龙 妮妹
 
 时间2019.8.22
 
@@ -37,20 +37,20 @@ create table if not exists `topic`(
    PRIMARY KEY ( `id` )
 )ENGINE=InnoDB DEFAULT CHARSET=utf8;
 ```
-添加了lombok插件
+
+# 插件使用
+## 添加了lombok插件
 
 导入项目的童鞋记得下载此插件
 
+## 添加了MBG插件 
 
-# 目前项目存在的问题
-1.图片显示
-```html
+自动生成单例的model（多表连接还需要手动）
 
-<img class="media-object"  src="https://avatars1.githubusercontent.com/u/43908729?v=4">
-```
+使用的插件 mysql版本需要为5.1.34否则会运行错误
 
-2.span标签被thymeleaf替代
-```html
+mvn -Dmybatis.generator.overwrite=true mybatis-generator:generate
 
-<span th:text="${topicDTO.commentCount}"> 个回复 </span>
-```
+# 项目遇到的问题以及解决方案
+
+遇到pom文件爆红 可以通过找到爆红的依赖 在本地仓库删除 重新导入

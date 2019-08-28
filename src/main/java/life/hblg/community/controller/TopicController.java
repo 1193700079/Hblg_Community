@@ -1,7 +1,6 @@
 package life.hblg.community.controller;
 
 import life.hblg.community.dto.TopicDTO;
-import life.hblg.community.mapper.TopicMapper;
 import life.hblg.community.service.TopicService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -13,8 +12,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 @Controller
 public class TopicController {
 
-    @Autowired
-    private TopicMapper topicMapper;
     @Autowired
     private TopicService topicService;
 

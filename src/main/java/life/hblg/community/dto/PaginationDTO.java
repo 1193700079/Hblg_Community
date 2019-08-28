@@ -1,6 +1,5 @@
 package life.hblg.community.dto;
 
-import life.hblg.community.model.Topic;
 import lombok.Data;
 
 import java.util.ArrayList;

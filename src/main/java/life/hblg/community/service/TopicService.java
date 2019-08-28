@@ -5,7 +5,9 @@ import life.hblg.community.dto.TopicDTO;
 import life.hblg.community.mapper.TopicMapper;
 import life.hblg.community.mapper.UserMapper;
 import life.hblg.community.model.Topic;
+import life.hblg.community.model.TopicExample;
 import life.hblg.community.model.User;
+import org.apache.ibatis.session.RowBounds;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -27,13 +29,16 @@ public class TopicService {
         //因此currentId(offset) 只有 0 5 10这样的取值
         Integer offset = size*(pageId-1);
 
-        List<Topic> topicList = topicMapper.getList (offset,size);
+        //使用插件 实现分页
+        List <Topic> topicList = topicMapper.selectByExampleWithRowbounds ( new TopicExample ( ), new RowBounds ( offset, size ) );
+
+//        List<Topic> topicList = topicMapper.getList (offset,size);
         List<TopicDTO> topicDTOList = new ArrayList <> ();
 
         PaginationDTO paginationDTO = new PaginationDTO ( );
         for (Topic topic : topicList) {
             //1.通过找到topic表中对应的关联UserID找到User
-            User user = userMapper.findById ( topic.getCreateId () );
+            User user = userMapper.selectByPrimaryKey ( topic.getCreateId () );
             //2.将找到的User 放入两表的DTO中
             TopicDTO topicDTO=new TopicDTO ();
             BeanUtils.copyProperties ( topic,topicDTO);//3.spring中的工具类 将topic的属性都给topicDTO
@@ -41,7 +46,10 @@ public class TopicService {
             topicDTOList.add ( topicDTO );  //将每个DTO添加到TopicLIST中
         }
         paginationDTO.setTopicDTOs( topicDTOList);
-        Integer totalCount = topicMapper.Count ();
+
+        TopicExample topicExample = new TopicExample ( );
+       Integer totalCount = (int)topicMapper.countByExample ( topicExample );
+//        Integer totalCount = topicMapper.Count ();
         paginationDTO.setPagenation(totalCount,pageId,size);
         return  paginationDTO;
     }
@@ -52,13 +60,18 @@ public class TopicService {
         //因此currentId(offset) 只有 0 5 10这样的取值
         Integer offset = size*(pageId-1);
 
-        List<Topic> topicList = topicMapper.getListByUserId(userId,offset,size);
+
+        TopicExample example = new TopicExample ( );
+        example.createCriteria ().andCreateIdEqualTo ( userId );
+
+        List <Topic> topicList = topicMapper.selectByExampleWithRowbounds ( example, new RowBounds ( offset, size ) );
+    //    List<Topic> topicList = topicMapper.getListByUserId(userId,offset,size);
         List<TopicDTO> topicDTOList = new ArrayList <> ();
 
         PaginationDTO paginationDTO = new PaginationDTO ( );
         for (Topic topic : topicList) {
             //1.通过找到topic表中对应的关联UserID找到User
-            User user = userMapper.findById ( topic.getCreateId () );
+            User user = userMapper.selectByPrimaryKey ( topic.getCreateId () );
             //2.将找到的User 放入两表的DTO中
             TopicDTO topicDTO=new TopicDTO ();
             BeanUtils.copyProperties ( topic,topicDTO);//3.spring中的工具类 将topic的属性都给topicDTO
@@ -66,17 +79,23 @@ public class TopicService {
             topicDTOList.add ( topicDTO );  //将每个DTO添加到TopicLIST中
         }
         paginationDTO.setTopicDTOs( topicDTOList);
-        Integer totalCount = topicMapper.CountByuserId (userId);
+
+        TopicExample topicExample = new TopicExample ( );
+        topicExample.createCriteria ().andCreateIdEqualTo ( userId );
+        Integer totalCount = (int)topicMapper.countByExample ( topicExample );
+    //    Integer totalCount = topicMapper.CountByuserId (userId);
         paginationDTO.setPagenation(totalCount,pageId,size);
         return  paginationDTO;
     }
 
     //得到详情列表
     public TopicDTO getTopicDetialById(Integer id) {
-        Topic topic =topicMapper.getTopicDetialById(id);
+
+
+        Topic topic =topicMapper.selectByPrimaryKey (id);
         TopicDTO topicDTO = new TopicDTO ();
         BeanUtils.copyProperties ( topic,topicDTO);//3.spring中的工具类 将topic的属性都给topicDTO
-        User user = userMapper.findById ( topic.getCreateId () );
+        User user = userMapper.selectByPrimaryKey ( topic.getCreateId () );
         topicDTO.setUser ( user );
         return  topicDTO;
     }
@@ -92,8 +111,16 @@ public class TopicService {
             topicMapper.insert(topic);
         }else {
             //更新
-            topic.setGmtModify(System.currentTimeMillis ());
-            topicMapper.update(topic);
+            Topic updateTopic = new Topic ( );
+            updateTopic.setGmtModify(System.currentTimeMillis ());
+            updateTopic.setTitle ( topic.getTitle () );
+            updateTopic.setDescription ( topic.getDescription () );
+            updateTopic.setTag ( topic.getTag () );
+
+            TopicExample example = new TopicExample ( );
+            example.createCriteria ().andIdEqualTo ( topic.getId () );
+            topicMapper.updateByExampleSelective ( updateTopic, example );
+//            topicMapper.update(topic);
         }
     }
 }

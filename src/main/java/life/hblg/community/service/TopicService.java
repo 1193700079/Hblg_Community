@@ -2,6 +2,8 @@ package life.hblg.community.service;
 
 import life.hblg.community.dto.PaginationDTO;
 import life.hblg.community.dto.TopicDTO;
+import life.hblg.community.exception.CustomizeErrorCode;
+import life.hblg.community.exception.CustomizeException;
 import life.hblg.community.mapper.TopicMapper;
 import life.hblg.community.mapper.UserMapper;
 import life.hblg.community.model.Topic;
@@ -91,8 +93,10 @@ public class TopicService {
     //得到详情列表
     public TopicDTO getTopicDetialById(Integer id) {
 
-
         Topic topic =topicMapper.selectByPrimaryKey (id);
+        if(topic == null){
+            throw new CustomizeException ( CustomizeErrorCode.QUSETION_NOT_FOUND);
+        }
         TopicDTO topicDTO = new TopicDTO ();
         BeanUtils.copyProperties ( topic,topicDTO);//3.spring中的工具类 将topic的属性都给topicDTO
         User user = userMapper.selectByPrimaryKey ( topic.getCreateId () );
@@ -119,8 +123,26 @@ public class TopicService {
 
             TopicExample example = new TopicExample ( );
             example.createCriteria ().andIdEqualTo ( topic.getId () );
-            topicMapper.updateByExampleSelective ( updateTopic, example );
+            int updateID = topicMapper.updateByExampleSelective ( updateTopic, example );
+            // updateID为0表示没有更新 为1表示更新成功
+            if(updateID == 0 ){
+                throw  new CustomizeException ( CustomizeErrorCode.QUSETION_NOT_FOUND );
+            }
 //            topicMapper.update(topic);
         }
+    }
+
+    //阅读数增加
+    //1.取出指定ID的Topic
+    //2.设置其ViewCount ++
+    public void incView(Integer id) {
+        TopicExample example = new TopicExample ( );
+        example.createCriteria ().andIdEqualTo ( id );
+
+        Topic topic = topicMapper.selectByPrimaryKey ( id );
+        Topic updateTopic = new Topic ( );
+        updateTopic.setViewCount (topic.getViewCount () + 1 );
+
+        topicMapper.updateByExampleSelective ( updateTopic,example);
     }
 }

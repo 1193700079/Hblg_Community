@@ -59,27 +59,27 @@
             <!--分页按钮-->
             <nav aria-label="Page navigation" class="paginationNav">
                 <ul class="pagination">
-                    <li th:if="${paginationDTO.isBackFirstPage}">
+                    <li th:if="${paginationDTO.pageInfo.pageNum>=3}">
                         <a th:href="@{/(pageId=1)}" aria-label="Previous">
                             <span aria-hidden="true">&lt;&lt;</span>
                         </a>
                     </li>
-                    <li th:if="${paginationDTO.isPrevious}">
-                        <a th:href="@{/(pageId=${paginationDTO.currentPageId - 1})}" aria-label="Previous">
+                    <li th:if="${paginationDTO.pageInfo.hasPreviousPage}">
+                        <a th:href="@{/(pageId=${paginationDTO.pageInfo.pageNum - 1})}" aria-label="Previous">
                             <span aria-hidden="true">&lt;</span>
                         </a>
                     </li>
-                    <li th:each="pageId:${paginationDTO.pages}"
-                        th:class="${paginationDTO.currentPageId==pageId} ? 'active':''">
+                    <li th:each="pageId:${paginationDTO.pageInfo.navigatepageNums}"
+                        th:class="${paginationDTO.pageInfo.pageNum==pageId} ? 'active':''">
                         <a th:href="@{/(pageId=${pageId})}" th:text="${pageId}"></a>
                     </li>
-                    <li th:if="${paginationDTO.isNext}">
-                        <a th:href="@{/(pageId=${paginationDTO.currentPageId + 1})}" aria-label="Next">
+                    <li th:if="${paginationDTO.pageInfo.hasNextPage}">
+                        <a th:href="@{/(pageId=${paginationDTO.pageInfo.pageNum + 1})}" aria-label="Next">
                             <span aria-hidden="true">&gt;</span>
                         </a>
                     </li>
-                    <li th:if="${paginationDTO.isBackEndPage}">
-                        <a th:href="@{/(pageId=${paginationDTO.totalPage})}" aria-label="Next">
+                    <li th:if="${!paginationDTO.pageInfo.isLastPage}">
+                        <a th:href="@{/(pageId=${paginationDTO.pageInfo.navigateLastPage})}" aria-label="Next">
                             <span aria-hidden="true">&gt;&gt;</span>
                         </a>
                     </li>

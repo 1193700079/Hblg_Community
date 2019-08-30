@@ -1,6 +1,7 @@
 package life.hblg.community.controller;
 
 import life.hblg.community.dto.PaginationDTO;
+import life.hblg.community.model.Topic;
 import life.hblg.community.service.TopicService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -9,6 +10,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.List;
 
 @Controller  //处理URL请求的
 public class IndexController {
@@ -21,10 +23,14 @@ public class IndexController {
     public String say(HttpServletRequest request,
                       Model model,
                       @RequestParam(name = "pageId",defaultValue = "1")Integer pageId,
-                      @RequestParam(name = "size",defaultValue = "2")Integer size){
+                      @RequestParam(name = "size",defaultValue = "3")Integer size){
 
 
+//        拿到分页信息
         PaginationDTO paginationDTO = topicService.getList(pageId, size);
+
+        paginationDTO.getPageInfo ();
+        paginationDTO.getTopicDTOs ();
         model.addAttribute ( "paginationDTO",paginationDTO );
         return "index" ;  //index 为view层
     }

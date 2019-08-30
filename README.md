@@ -53,6 +53,18 @@ insert into topic (title,description,create_id,gmt_create,gmt_modify,comment_cou
 
 
 ````
+comment表
+```sql
+drop table comment;
+create table if not exists `comment`(
+   `id` INT UNSIGNED AUTO_INCREMENT,
+   `topic_id` int NOT NULL,
+   `commentor_id` int NOT NULL,
+   `comment_content` text,
+   `like_count` int default 0,
+   PRIMARY KEY ( `id` )
+)ENGINE=InnoDB DEFAULT CHARSET=utf8;
+```
 
 # 插件使用
 ## 添加了lombok插件

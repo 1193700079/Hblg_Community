@@ -41,6 +41,7 @@ public class ProfileController {
         }
 
 
+        //拿到分页信息
         PaginationDTO paginationDTO =  topicService.getListByUserId(user.getId (),pageId,size);
         model.addAttribute ( "paginationDTO",paginationDTO );
         return "profile";

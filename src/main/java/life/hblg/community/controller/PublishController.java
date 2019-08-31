@@ -81,7 +81,9 @@ public class PublishController {
             return "publish";
         }
         topic.setCreateId ( user.getId () );
-
+        topic.setViewCount ( 0 );
+        topic.setCommentCount ( 0 );
+        topic.setLikeCount ( 0 );
         topic.setId ( id );
 
         System.out.println (topic.getId () );

@@ -1,16 +1,26 @@
 package life.hblg.community.dto;
 
+import com.github.pagehelper.PageInfo;
 import lombok.Data;
-
-import java.util.ArrayList;
 import java.util.List;
 
 //页面的页码信息  （面向对象）
 @Data
 public class PaginationDTO {
 
-    //js 可以写 不过拿程序练练手
+    //列表信息（包括user 和 topic）
     private List<TopicDTO> topicDTOs;
+    private PageInfo pageInfo; //分页属性信息
+}
+
+/*
+public class PaginationDTO {
+
+    //js 可以写 不过拿程序练练手
+    private List<Topic> topics;
+    private List<TopicDTO> topicDTOs;
+    private PageInfo pageInfo;
+
     private Boolean isBackFirstPage;//是否能返回第一页 <<
     private Boolean isBackEndPage; //是否能返回最后一页  >>
     private Boolean isPrevious; //是否能向前 <
@@ -18,6 +28,7 @@ public class PaginationDTO {
     private Integer CurrentPageId; // 当前页
     private List<Integer> pages =  new ArrayList <> (); //所有页
     private Integer totalPage; //总页数
+
 
 
     public void setPagenation(Integer totalCount, Integer pageId, Integer size) {
@@ -72,3 +83,4 @@ public class PaginationDTO {
         }
     }
 }
+*/

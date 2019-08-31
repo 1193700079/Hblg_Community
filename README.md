@@ -53,6 +53,18 @@ insert into topic (title,description,create_id,gmt_create,gmt_modify,comment_cou
 
 
 ````
+comment表
+```sql
+drop table comment;
+create table if not exists `comment`(
+   `id` INT UNSIGNED AUTO_INCREMENT,
+   `topic_id` int NOT NULL,
+   `commentor_id` int NOT NULL,
+   `comment_content` text,
+   `like_count` int default 0,
+   PRIMARY KEY ( `id` )
+)ENGINE=InnoDB DEFAULT CHARSET=utf8;
+```
 
 # 插件使用
 ## 添加了lombok插件
@@ -67,6 +79,12 @@ insert into topic (title,description,create_id,gmt_create,gmt_modify,comment_cou
 
 mvn -Dmybatis.generator.overwrite=true mybatis-generator:generate
 
+针对MBG新增插件：
+ ```xml
+  <!--不生成重复的mapper.xml 这样以后就不用老是去删了-->
+ <plugin type="org.mybatis.generator.plugins.UnmergeableXmlMappersPlugin"></plugin>
+
+```
 # 项目遇到的问题以及解决方案
 
-遇到pom文件爆红 可以通过找到爆红的依赖 在本地仓库删除 重新导入
+遇到pom文件爆红 可以通过找到爆红的依赖 在本地仓库删除 重新  

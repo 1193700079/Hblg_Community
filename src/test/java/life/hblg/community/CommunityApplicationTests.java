@@ -11,8 +11,10 @@ import org.springframework.test.context.junit4.SpringRunner;
 @MapperScan(basePackages = "com.hblg.community.mapper")
 public class CommunityApplicationTests {
 
+
     @Test
     public void contextLoads() {
+
     }
 
 }

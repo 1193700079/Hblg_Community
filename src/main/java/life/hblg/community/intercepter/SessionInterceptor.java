@@ -20,7 +20,7 @@ public class SessionInterceptor implements HandlerInterceptor {
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
-        Cookie[] cookies=request.getCookies ();
+     /*  Cookie[] cookies=request.getCookies ();
         for (Cookie cookie : cookies) {
             if(cookie.getName ().equals ( "token" )){
                 String token = cookie.getValue ();
@@ -33,11 +33,9 @@ public class SessionInterceptor implements HandlerInterceptor {
                 }
                 break;
             }
-        }
-
+        }*/
 //        默认返回true 不然后面的代码无法执行
         return  true;
-
     }
 
     @Override

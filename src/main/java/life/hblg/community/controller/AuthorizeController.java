@@ -17,7 +17,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.UUID;
 
-//gihub授权登录的控制器
+//github授权登录的控制器
 @Controller
 public class AuthorizeController {
 
@@ -69,6 +69,7 @@ public class AuthorizeController {
             user.setBio ( githubUser.getBio () );
             model.addAttribute ( "avatarUrl", user.getAvatarUrl ( ) ); //由于最后返回是重定向 所以这个model就消失了
             System.out.println (user.getAvatarUrl () +"**c****************");
+            System.out.println (user.toString() +"**c****************");
 
             userService.createOrUpdate ( user );
 

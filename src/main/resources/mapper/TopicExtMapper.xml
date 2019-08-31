@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="life.hblg.community.mapper.TopicExtMapper">
+  <resultMap id="BaseResultMap" type="life.hblg.community.model.Topic">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="title" jdbcType="VARCHAR" property="title" />
+    <result column="create_id" jdbcType="INTEGER" property="createId" />
+    <result column="gmt_create" jdbcType="BIGINT" property="gmtCreate" />
+    <result column="gmt_modify" jdbcType="BIGINT" property="gmtModify" />
+    <result column="comment_count" jdbcType="INTEGER" property="commentCount" />
+    <result column="view_count" jdbcType="INTEGER" property="viewCount" />
+    <result column="like_count" jdbcType="INTEGER" property="likeCount" />
+    <result column="tag" jdbcType="VARCHAR" property="tag" />
+  </resultMap>
+  <!---->
+  <update id="incView" parameterType="life.hblg.community.model.Topic">
+    update topic
+    set VIEW_COUNT = VIEW_COUNT+ #{viewCount}
+    where id = #{id}
+  </update>
+</mapper>

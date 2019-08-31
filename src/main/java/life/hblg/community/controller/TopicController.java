@@ -20,6 +20,9 @@ public class TopicController {
                         Model model){
 
         TopicDTO topicDTO =topicService.getTopicDetialById(id);  //返回一个TopicDTO
+
+        //增加阅读数功能
+        topicService.incView(id);
         model.addAttribute ( "topicDTO",topicDTO );
         return "topic";
     }

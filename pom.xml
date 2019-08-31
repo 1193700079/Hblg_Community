@@ -81,7 +81,12 @@
             <artifactId>mysql-connector-java</artifactId>
             <version>5.1.34</version>
         </dependency>
-
+        <!--    导入oauth依赖    -->
+        <dependency>
+            <groupId>me.zhyd.oauth</groupId>
+            <artifactId>JustAuth</artifactId>
+            <version>1.6.0-beta</version>
+        </dependency>
     </dependencies>
 
     <build>

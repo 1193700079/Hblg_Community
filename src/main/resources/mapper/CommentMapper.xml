@@ -9,6 +9,7 @@
     <result column="like_count" jdbcType="INTEGER" property="likeCount" />
     <result column="gmt_create" jdbcType="BIGINT" property="gmtCreate" />
     <result column="gmt_modify" jdbcType="BIGINT" property="gmtModify" />
+    <result column="comment_count" jdbcType="INTEGER" property="commentCount" />
   </resultMap>
   <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="life.hblg.community.model.Comment">
     <result column="comment_content" jdbcType="LONGVARCHAR" property="commentContent" />
@@ -72,7 +73,7 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    id, topic_id, commentor_id, type, like_count, gmt_create, gmt_modify
+    id, topic_id, commentor_id, type, like_count, gmt_create, gmt_modify, comment_count
   </sql>
   <sql id="Blob_Column_List">
     comment_content
@@ -128,10 +129,12 @@
   <insert id="insert" parameterType="life.hblg.community.model.Comment">
     insert into comment (id, topic_id, commentor_id, 
       type, like_count, gmt_create, 
-      gmt_modify, comment_content)
+      gmt_modify, comment_count, comment_content
+      )
     values (#{id,jdbcType=INTEGER}, #{topicId,jdbcType=INTEGER}, #{commentorId,jdbcType=INTEGER}, 
       #{type,jdbcType=INTEGER}, #{likeCount,jdbcType=INTEGER}, #{gmtCreate,jdbcType=BIGINT}, 
-      #{gmtModify,jdbcType=BIGINT}, #{commentContent,jdbcType=LONGVARCHAR})
+      #{gmtModify,jdbcType=BIGINT}, #{commentCount,jdbcType=INTEGER}, #{commentContent,jdbcType=LONGVARCHAR}
+      )
   </insert>
   <insert id="insertSelective" parameterType="life.hblg.community.model.Comment">
     insert into comment
@@ -156,6 +159,9 @@
       </if>
       <if test="gmtModify != null">
         gmt_modify,
+      </if>
+      <if test="commentCount != null">
+        comment_count,
       </if>
       <if test="commentContent != null">
         comment_content,
@@ -182,6 +188,9 @@
       </if>
       <if test="gmtModify != null">
         #{gmtModify,jdbcType=BIGINT},
+      </if>
+      <if test="commentCount != null">
+        #{commentCount,jdbcType=INTEGER},
       </if>
       <if test="commentContent != null">
         #{commentContent,jdbcType=LONGVARCHAR},
@@ -218,6 +227,9 @@
       <if test="record.gmtModify != null">
         gmt_modify = #{record.gmtModify,jdbcType=BIGINT},
       </if>
+      <if test="record.commentCount != null">
+        comment_count = #{record.commentCount,jdbcType=INTEGER},
+      </if>
       <if test="record.commentContent != null">
         comment_content = #{record.commentContent,jdbcType=LONGVARCHAR},
       </if>
@@ -235,6 +247,7 @@
       like_count = #{record.likeCount,jdbcType=INTEGER},
       gmt_create = #{record.gmtCreate,jdbcType=BIGINT},
       gmt_modify = #{record.gmtModify,jdbcType=BIGINT},
+      comment_count = #{record.commentCount,jdbcType=INTEGER},
       comment_content = #{record.commentContent,jdbcType=LONGVARCHAR}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
@@ -248,7 +261,8 @@
       type = #{record.type,jdbcType=INTEGER},
       like_count = #{record.likeCount,jdbcType=INTEGER},
       gmt_create = #{record.gmtCreate,jdbcType=BIGINT},
-      gmt_modify = #{record.gmtModify,jdbcType=BIGINT}
+      gmt_modify = #{record.gmtModify,jdbcType=BIGINT},
+      comment_count = #{record.commentCount,jdbcType=INTEGER}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -274,6 +288,9 @@
       <if test="gmtModify != null">
         gmt_modify = #{gmtModify,jdbcType=BIGINT},
       </if>
+      <if test="commentCount != null">
+        comment_count = #{commentCount,jdbcType=INTEGER},
+      </if>
       <if test="commentContent != null">
         comment_content = #{commentContent,jdbcType=LONGVARCHAR},
       </if>
@@ -288,6 +305,7 @@
       like_count = #{likeCount,jdbcType=INTEGER},
       gmt_create = #{gmtCreate,jdbcType=BIGINT},
       gmt_modify = #{gmtModify,jdbcType=BIGINT},
+      comment_count = #{commentCount,jdbcType=INTEGER},
       comment_content = #{commentContent,jdbcType=LONGVARCHAR}
     where id = #{id,jdbcType=INTEGER}
   </update>
@@ -298,7 +316,8 @@
       type = #{type,jdbcType=INTEGER},
       like_count = #{likeCount,jdbcType=INTEGER},
       gmt_create = #{gmtCreate,jdbcType=BIGINT},
-      gmt_modify = #{gmtModify,jdbcType=BIGINT}
+      gmt_modify = #{gmtModify,jdbcType=BIGINT},
+      comment_count = #{commentCount,jdbcType=INTEGER}
     where id = #{id,jdbcType=INTEGER}
   </update>
   <select id="selectByExampleWithBLOBsWithRowbounds" parameterType="life.hblg.community.model.CommentExample" resultMap="ResultMapWithBLOBs">

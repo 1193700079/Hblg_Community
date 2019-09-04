@@ -77,8 +77,8 @@
                             <span aria-hidden="true">&gt;</span>
                         </a>
                     </li>
-                    <li th:if="${paginationDTO.pageInfo.pageNum<paginationDTO.pageInfo.navigateLastPage}">
-                        <a th:href="@{'/profile/'+${section}(pageId=${paginationDTO.pageInfo.navigateLastPage})}"
+                    <li th:if="${!paginationDTO.pageInfo.isLastPage}">
+                        <a th:href="@{'/profile/'+${section}(pageId=${paginationDTO.pageInfo.pages})}"
                            aria-label="Next">
                             <span aria-hidden="true">&gt;&gt;</span>
                         </a>

@@ -15,6 +15,8 @@ public class Comment {
 
     private Long gmtModify;
 
+    private Integer commentCount;
+
     private String commentContent;
 
     public Integer getId() {
@@ -71,6 +73,14 @@ public class Comment {
 
     public void setGmtModify(Long gmtModify) {
         this.gmtModify = gmtModify;
+    }
+
+    public Integer getCommentCount() {
+        return commentCount;
+    }
+
+    public void setCommentCount(Integer commentCount) {
+        this.commentCount = commentCount;
     }
 
     public String getCommentContent() {

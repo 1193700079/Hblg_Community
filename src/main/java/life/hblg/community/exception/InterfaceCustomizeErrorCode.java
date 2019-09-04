@@ -4,4 +4,6 @@ package life.hblg.community.exception;
 public interface InterfaceCustomizeErrorCode {
 
     String getMsg();
+
+    Integer getCode();
 }

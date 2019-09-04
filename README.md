@@ -55,13 +55,16 @@ insert into topic (title,description,create_id,gmt_create,gmt_modify,comment_cou
 ````
 comment表
 ```sql
-drop table comment;
+drop  table comment;
 create table if not exists `comment`(
    `id` INT UNSIGNED AUTO_INCREMENT,
    `topic_id` int NOT NULL,
    `commentor_id` int NOT NULL,
+   `type` int ,
    `comment_content` text,
    `like_count` int default 0,
+   `gmt_create` bigint NOT NULL,
+   `gmt_modify` bigint NOT NULL,
    PRIMARY KEY ( `id` )
 )ENGINE=InnoDB DEFAULT CHARSET=utf8;
 ```
@@ -88,3 +91,7 @@ mvn -Dmybatis.generator.overwrite=true mybatis-generator:generate
 # 项目遇到的问题以及解决方案
 
 遇到pom文件爆红 可以通过找到爆红的依赖 在本地仓库删除 重新  
+
+# 隧道更改
+localhost:8080
+https://hblgcommunity.free.cngrok.com

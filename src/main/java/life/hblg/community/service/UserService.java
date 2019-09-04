@@ -51,4 +51,11 @@ public class UserService {
 //            userMapper.update(dbUser);
 //        }
     }
+
+    public User findByToken(String token) {
+        UserExample example = new UserExample ( );
+        example.createCriteria ().andTokenEqualTo ( token );
+        List<User> users = userMapper.selectByExample ( example );
+        return users.get ( 0 );
+    }
 }

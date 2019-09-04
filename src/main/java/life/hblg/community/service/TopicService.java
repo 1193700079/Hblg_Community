@@ -1,6 +1,5 @@
 package life.hblg.community.service;
 
-import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import life.hblg.community.dto.PaginationDTO;
@@ -14,13 +13,17 @@ import life.hblg.community.mapper.UserMapper;
 import life.hblg.community.model.Topic;
 import life.hblg.community.model.TopicExample;
 import life.hblg.community.model.User;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.ibatis.session.RowBounds;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 //Service 层用来组装User和Topic
 @Service
@@ -42,10 +45,12 @@ public class TopicService {
         //由于数据库中的1 2 3 4 都表示第一页
         //因此currentId(offset) 只有 0 5 10这样的取值
      //   Integer offset = size*(pageId-1);
-
+        TopicExample example = new TopicExample ( );
+        example.setOrderByClause ( "gmt_create desc" );
         //使用插件 实现分页 第1页  2条内容...1
         PageHelper.startPage(pageId, size);
-        List <Topic> topicList = topicMapper.selectByExample ( new TopicExample () );
+
+        List <Topic> topicList = topicMapper.selectByExample ( example );
         PageInfo pageInfo = new PageInfo(topicList);
 
 //   List <Topic> topicList = topicMapper.selectByExampleWithRowbounds ( new TopicExample ( ), new RowBounds ( offset, size ) );
@@ -79,6 +84,7 @@ public class TopicService {
 
         TopicExample example = new TopicExample ( );
         example.createCriteria ().andCreateIdEqualTo ( userId );
+        example.setOrderByClause ( "gmt_create desc" );
 
         PageHelper.startPage(pageId, size);
         List <Topic> topicList = topicMapper.selectByExample ( example );
@@ -200,5 +206,50 @@ public class TopicService {
         topic.setViewCount ( 1 );
         topicExtMapper.incView ( topic );
 
+    }
+
+    public User findById(Integer id) {
+        Topic topic = topicMapper.selectByPrimaryKey ( id );
+        Integer userid = topic.getCreateId ();
+        User user = userMapper.selectByPrimaryKey ( userid );
+        return  user;
+    }
+
+   /* public Topic createTopic(String title, String description, String tag, User user) {
+        Topic topic = new Topic ();
+        topic.setTitle ( title );
+        topic.setDescription ( description );
+        topic.setTag ( tag );
+        topic.setCreateId ( user.getId () );
+        topic.setViewCount ( 0 );
+        topic.setCommentCount ( 0 );
+        topic.setLikeCount ( 0 );
+        return topic;
+    }*/
+   public Topic createTopic(String title, String description, String tag){
+       Topic topic = new Topic ();
+       topic.setTitle ( title );
+       topic.setDescription ( description );
+       topic.setTag ( tag );
+       topic.setCreateId ( 4 );
+       topic.setViewCount ( 0 );
+       topic.setCommentCount ( 0 );
+       topic.setLikeCount ( 0 );
+       return topic;
+   }
+
+    public List<Topic> selectRelevantTopic(Integer id) {
+
+        Topic topic =new Topic ();
+        topic.setId ( id );
+
+        Topic dcTopic = topicMapper.selectByPrimaryKey ( id );
+        String[] strings = StringUtils.split ( dcTopic.getTag () ,",");
+        String regexpTag = Arrays.stream ( strings ).collect( Collectors.joining("|"));
+
+        topic.setTag ( regexpTag );
+
+        List<Topic> topics = topicExtMapper.selectRelevantTopics ( topic );
+        return  topics;
     }
 }

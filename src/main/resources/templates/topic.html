@@ -27,25 +27,82 @@
 <div class="container-fluid main profile">
     <div class="row">
         <div class="col-lg-9 col-md-12 col-sm-12 col-xs-12" >
-            <h4><span th:text="${topicDTO.title}"></span></h4>
-            <span class="text-desc">
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                <h4><span th:text="${topicDTO.title}"></span></h4>
+                <span class="text-desc">
                         <!--<span th:text="${topicDTO.commentCount}"></span>个回复 -->
                   作者: <span th:text="${topicDTO.user.name}"></span> |
                   发布时间: <span th:text="${#dates.format(topicDTO.getGmtCreate(),'yyyy-MM-dd HH:mm')}"></span> |
                   阅读数: <span th:text="${topicDTO.viewCount}"> </span> |
                   点赞数: <span th:text="${topicDTO.commentCount}"></span>
             </span>
-            <hr>
-            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12"  th:text="${topicDTO.description}">
+                <hr >
+                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12"  th:text="${topicDTO.description}">
+                    </div>
+                <hr >
+
+                <a th:href="@{'/publish/'+${topicDTO.id}}" class="comment-menu" th:if="${flag}"
+                ><span class="glyphicon glyphicon-pencil" aria-hidden="true"></span>
+                    编辑
+                </a>
+                <hr >
             </div>
-            <hr class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-            <a th:href="@{'/publish/'+${topicDTO.id}}" class="comment-menu"
-            ><span class="glyphicon glyphicon-pencil" aria-hidden="true"></span>
-                编辑
-            </a>
+            <hr>
+            <!--回复数-->
+            <h3>
+                回复数：<span th:text="${topicDTO.commentCount}"></span>
+            </h3>
 
+            <!--回复列表-->
+            <div class="media" th:each="comment : ${comments}">
+                <div class="media-left">
+                    <!--链接还没写-->
+                    <a href="#">
+                        <img class="media-object"  th:src="${comment.user.avatarUrl}">
+                        <span th:text="${comment.user.name}"></span>
+                    </a>
+                </div>
+                <div class="media-body">
+                    <h6 class="media-heading"  >
+                        <!--回复内容-->
+                        <span th:text="${comment.commentContent}"></span>
+                    </h6>
+                    <br>
+                    <span class="text-desc">
+                        <span th:text="${comment.likeCount}"></span>个喜欢
+                        <span th:text="${#dates.format(comment.getGmtCreate(),'yyyy-MM-dd HH:mm')}"></span>
+                    </span>
+                </div>
+            </div>
 
+            <br>
+            <hr>
+            <!--回复输入框-->
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                <div class="media" >
+                    <div class="media-left" >
+                        <a href="#">
+                            <img class="media-object img-circle"  th:src="${topicDTO.user.avatarUrl}">
+                            <!--https://avatars1.githubusercontent.com/u/43908729?v=4-->
+                        </a>
+                    </div>
+                    <div class="media-body ">
+                        <h6 class="media-heading"  >
+                            <span th:text="${topicDTO.user.name}"></span>
+                        </h6>
+                    </div>
+                </div>
+                <hr>
+                <label for="comment_content" >请输入你的回复内容</label>
+                <textarea style="height: 300px" name="comment_content" id="comment_content"  class="form-control" placeholder="回复内容..."></textarea>
+            </div>
+            <input type="hidden" id="topic_id" th:value="${topicDTO.id}">
+            <input type="hidden" id="user_id" th:value="${topicDTO.user.id}">
+            <button type="button" class="btn btn-success publish-button" onclick="post()" >回复</button>
         </div>
+
+
+
 
         <div class="col-lg-3 col-md-12 col-sm-12 col-xs-12" >
             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" >
@@ -53,7 +110,7 @@
                 <div class="media" >
                     <div class="media-left" >
                         <a href="#">
-                            <img class="media-object img-circle"  th:src="${session.user.avatarUrl}">
+                            <img class="media-object img-circle"  th:src="${topicDTO.user.avatarUrl}">
                             <!--https://avatars1.githubusercontent.com/u/43908729?v=4-->
                         </a>
                     </div>
@@ -72,4 +129,31 @@
     </div>
 </div>
 </body>
+<script>
+    <!--由于jQuery 是外来引进的 所以编写代码的时候回有波浪线-->
+    function post() {
+        var topicId = $("#topic_id").val();
+        var commentorId=$("#user_id").val();
+        var commentContent = $("#comment_content").val();
+        $.ajax({
+            contentType:"application/json",
+            type:"post",
+            url:"/comment",
+            data:JSON.stringify({
+                "topicId":topicId,
+                "commentContent":commentContent,
+                "commentorId":commentorId,
+                "type":1
+            }),
+            success: function (response) {
+                console.log(response)
+            },
+            dataType:"json"
+        })
+
+        console.log(topicId);
+        console.log(commentContent)
+        console.log(commentorId);
+    }
+</script>
 </html>

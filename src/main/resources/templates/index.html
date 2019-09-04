@@ -79,7 +79,7 @@
                         </a>
                     </li>
                     <li th:if="${!paginationDTO.pageInfo.isLastPage}">
-                        <a th:href="@{/(pageId=${paginationDTO.pageInfo.navigateLastPage})}" aria-label="Next">
+                        <a th:href="@{/(pageId=${paginationDTO.pageInfo.pages})}" aria-label="Next">
                             <span aria-hidden="true">&gt;&gt;</span>
                         </a>
                     </li>

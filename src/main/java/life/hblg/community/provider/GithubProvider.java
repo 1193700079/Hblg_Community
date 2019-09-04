@@ -24,6 +24,7 @@ public class GithubProvider {
 
 
         RequestBody body = RequestBody.create(mediaType, JSON.toJSONString ( access_tokenDTO ) );
+
         Request request = new Request.Builder()
                 .url("https://github.com/login/oauth/access_token")
                 .post(body)
@@ -31,8 +32,9 @@ public class GithubProvider {
         try  {
             Response response = client.newCall(request).execute();
             String string = response.body().string();
+            System.out.println (string );
             String token = string.split ( "&" )[0].split ( "=" )[1];
-            System.out.println (token );
+            System.out.println (token +"********a a ");
             return token;
         } catch (IOException e) {
             e.printStackTrace ( );
